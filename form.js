@@ -1,46 +1,45 @@
-const fs = require('fs');
-
 const validateName = (name) => {
-  return !(name.includes('-') || name.includes(','));
+  const regEx = /[A-Za-z]{5,}/;
+  return regEx.test(name);
 };
 
-const readHobbies = (info) => {
-  console.log('Please enter hobbies');
-  process.stdin.on('data', (chunk) => {
-    if (chunk.includes(',')) {
-      info.hobbies = chunk.trim().split(',');
-    }
-  });
-};
-
-const readDOB = (info) => {
-  console.log('Please enter DOB');
-  process.stdin.on('data', (chunk) => {
-    if (chunk.includes('-')) {
-      info.DOB = chunk.trim();
-      readHobbies(info);
-    }
-  });
-};
-
-const readName = (info) => {
-  console.log('Please enter name');
-  process.stdin.on('data', (chunk) => {
-    if (validateName(chunk)) {
-      info.name = chunk.trim();
-      readDOB(info);
-    }
-  });
+const validateDob = (dob) => {
+  const regEx = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+  return regEx.test(dob);
 };
 
 const main = () => {
-  const info = {};
   process.stdin.setEncoding('utf8');
-  readName(info);
+  const form = {};
+  let count = 1;
 
-  process.stdin.on('end', () => {
-    fs.writeFileSync('formInfo.json', JSON.stringify(info), 'utf8');
-    console.log('Thank you!!!');
+  console.log('Enter name');
+  process.stdin.on('data', (chunk) => {
+    const info = chunk.trim();
+    if (count === 1) {
+      if (!validateName(info)) {
+        console.log('Enter name');
+      } else {
+        form.name = info;
+        count++;
+        console.log('Enter DOB');
+      }
+    } else if (count === 2) {
+      if (!validateDob(info)) {
+        console.log('Wrong format, Enter DOB');
+      } else {
+        form.dob = info;
+        count++;
+        console.log('Enter hobbbies');
+      }
+    } else if (count === 3) {
+      if (!info) {
+        console.log('Enter atleast one hobbies');
+      } else {
+        form.hobbies = info.split(',');
+        count++;
+      }
+    }
   });
 };
 
