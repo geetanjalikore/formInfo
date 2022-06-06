@@ -8,6 +8,11 @@ const validateDob = (dob) => {
   return regEx.test(dob);
 };
 
+const validatePhoneNo = (contact) => {
+  const regEx = /^\d{10}$/;
+  return regEx.test(contact);
+};
+
 const main = () => {
   process.stdin.setEncoding('utf8');
   const form = {};
@@ -34,9 +39,17 @@ const main = () => {
       }
     } else if (count === 3) {
       if (!info) {
-        console.log('Enter atleast one hobbies');
+        console.log('Enter atleast one hobby');
       } else {
         form.hobbies = info.split(',');
+        count++;
+        console.log('Enter phone number');
+      }
+    } else if (count === 4) {
+      if (!validatePhoneNo(info)) {
+        console.log('Wrong format , Enter phone number');
+      } else {
+        form.phone = info;
         count++;
       }
     }
