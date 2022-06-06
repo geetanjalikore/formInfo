@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const validateName = (name) => {
   return !(name.includes('-') || name.includes(','));
 };
@@ -37,7 +39,7 @@ const main = () => {
   readName(info);
 
   process.stdin.on('end', () => {
-    console.log(info);
+    fs.writeFileSync('formInfo.json', JSON.stringify(info), 'utf8');
     console.log('Thank you!!!');
   });
 };
