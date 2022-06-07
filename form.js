@@ -1,10 +1,10 @@
 const validateName = (name) => {
-  const regEx = /[A-Za-z]{5,}/;
+  const regEx = /^[A-Za-z]{5,}$/;
   return regEx.test(name);
 };
 
 const validateDob = (dob) => {
-  const regEx = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+  const regEx = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   return regEx.test(dob);
 };
 
@@ -13,46 +13,75 @@ const validatePhoneNo = (contact) => {
   return regEx.test(contact);
 };
 
+class Form {
+  constructor() {
+    this.name = '';
+    this.dob = '';
+    this.hobbies = [];
+    this.phoneNo = '';
+    this.address = '';
+  }
+
+  setName(name) {
+    if (validateName(name)) {
+      this.name = name;
+      return true;
+    }
+    return false;
+  }
+
+  setDob(dob) {
+    if (validateDob(dob)) {
+      this.dob = dob;
+      return true;
+    }
+    return false;
+  }
+
+  setHobbies(hobbies) {
+    if (hobbies) {
+      this.hobbies = hobbies.split(',');
+      return true;
+    }
+    return false;
+  }
+
+  setPhoneNo(phoneNo) {
+    if (validatePhoneNo(phoneNo)) {
+      this.phoneNo = phoneNo;
+      return true;
+    }
+    return false;
+  }
+}
+
 const main = () => {
   process.stdin.setEncoding('utf8');
-  const form = {};
-  let count = 1;
+  const questions = ['Please enter name', 'Please Enter DOB', 'Please enter hobbbies', 'Enter phone number'];
+  const form = new Form();
+  let index = 0;
 
-  console.log('Enter name');
+  console.log(questions[index]);
   process.stdin.on('data', (chunk) => {
     const info = chunk.trim();
-    if (count === 1) {
-      if (!validateName(info)) {
-        console.log('Enter name');
-      } else {
-        form.name = info;
-        count++;
-        console.log('Enter DOB');
+    if (index === 0) {
+      if (form.setName(info)) {
+        index++;
       }
-    } else if (count === 2) {
-      if (!validateDob(info)) {
-        console.log('Wrong format, Enter DOB');
-      } else {
-        form.dob = info;
-        count++;
-        console.log('Enter hobbbies');
+    } else if (index === 1) {
+      if (form.setDob(info)) {
+        index++;
       }
-    } else if (count === 3) {
-      if (!info) {
-        console.log('Enter atleast one hobby');
-      } else {
-        form.hobbies = info.split(',');
-        count++;
-        console.log('Enter phone number');
+    } else if (index === 2) {
+      if (form.setHobbies(info)) {
+        index++;
       }
-    } else if (count === 4) {
-      if (!validatePhoneNo(info)) {
-        console.log('Wrong format , Enter phone number');
-      } else {
-        form.phone = info;
-        count++;
+    } else if (index === 3) {
+      if (form.setPhoneNo(info)) {
+        index++;
       }
     }
+    console.log(questions[index]);
   });
 };
 
