@@ -1,3 +1,4 @@
+/* eslint-disable no-process-exit */
 const validateName = (name) => {
   const regEx = /^[A-Za-z]{5,}$/;
   return regEx.test(name);
@@ -57,31 +58,23 @@ class Form {
 
 const main = () => {
   process.stdin.setEncoding('utf8');
-  const questions = ['Please enter name', 'Please Enter DOB', 'Please enter hobbbies', 'Enter phone number'];
   const form = new Form();
-  let index = 0;
 
-  console.log(questions[index]);
+  const questions = [
+    { quest: 'Please enter name', callBack: (name) => form.setName(name) },
+    { quest: 'Please Enter DOB', callBack: (dob) => form.setDob(dob) },
+    { quest: 'Please enter hobbbies', callBack: (hobbies) => form.setHobbies(hobbies) },
+    { quest: 'Please Enter phone number', callBack: (phoneNo) => form.setPhoneNo(phoneNo) }
+  ];
+
+  let index = 0;
+  console.log(questions[index].quest);
   process.stdin.on('data', (chunk) => {
     const info = chunk.trim();
-    if (index === 0) {
-      if (form.setName(info)) {
-        index++;
-      }
-    } else if (index === 1) {
-      if (form.setDob(info)) {
-        index++;
-      }
-    } else if (index === 2) {
-      if (form.setHobbies(info)) {
-        index++;
-      }
-    } else if (index === 3) {
-      if (form.setPhoneNo(info)) {
-        index++;
-      }
+    if (questions[index].callBack(info)) {
+      index++;
     }
-    console.log(questions[index]);
+    console.log(questions[index].quest);
   });
 };
 
