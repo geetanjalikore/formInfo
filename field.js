@@ -2,10 +2,12 @@ class Field {
   #name;
   #prompt;
   #response;
+  #validator;
 
-  constructor(name, prompt) {
+  constructor(name, prompt, validator = () => true) {
     this.#name = name;
     this.#prompt = prompt;
+    this.isValid = validator;
     this.#response = null;
   }
 

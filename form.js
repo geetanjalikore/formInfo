@@ -1,19 +1,3 @@
-/* eslint-disable no-process-exit */
-const validateName = (name) => {
-  const regEx = /^[A-Za-z]{5,}$/;
-  return regEx.test(name);
-};
-
-const validateDob = (dob) => {
-  const regEx = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
-  return regEx.test(dob);
-};
-
-const validatePhoneNo = (contact) => {
-  const regEx = /^\d{10}$/;
-  return regEx.test(contact);
-};
-
 class Form {
   #fields;
   #currentField;
