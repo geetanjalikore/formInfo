@@ -15,67 +15,25 @@ const validatePhoneNo = (contact) => {
 };
 
 class Form {
-  constructor() {
-    this.name = '';
-    this.dob = '';
-    this.hobbies = [];
-    this.phoneNo = '';
-    this.address = '';
+  #fields;
+  #currentField;
+  constructor(...fields) {
+    this.#fields = fields;
+    this.#currentField = 0;
   }
 
-  setName(name) {
-    if (validateName(name)) {
-      this.name = name;
-      return true;
-    }
-    return false;
+  getCurrentField() {
+    return this.#fields[this.#currentField];
   }
 
-  setDob(dob) {
-    if (validateDob(dob)) {
-      this.dob = dob;
-      return true;
-    }
-    return false;
+  fillCurrentField(response) {
+    this.getCurrentField().fill(response);
+    this.#currentField++;
   }
 
-  setHobbies(hobbies) {
-    if (hobbies) {
-      this.hobbies = hobbies.split(',');
-      return true;
-    }
-    return false;
-  }
-
-  setPhoneNo(phoneNo) {
-    if (validatePhoneNo(phoneNo)) {
-      this.phoneNo = phoneNo;
-      return true;
-    }
-    return false;
+  isComplete() {
+    return this.#fields.every((field) => field.isFilled());
   }
 }
 
-const main = () => {
-  process.stdin.setEncoding('utf8');
-  const form = new Form();
-
-  const questions = [
-    { quest: 'Please enter name', callBack: (name) => form.setName(name) },
-    { quest: 'Please Enter DOB', callBack: (dob) => form.setDob(dob) },
-    { quest: 'Please enter hobbbies', callBack: (hobbies) => form.setHobbies(hobbies) },
-    { quest: 'Please Enter phone number', callBack: (phoneNo) => form.setPhoneNo(phoneNo) }
-  ];
-
-  let index = 0;
-  console.log(questions[index].quest);
-  process.stdin.on('data', (chunk) => {
-    const info = chunk.trim();
-    if (questions[index].callBack(info)) {
-      index++;
-    }
-    console.log(questions[index].quest);
-  });
-};
-
-main();
+module.exports = { Form };
