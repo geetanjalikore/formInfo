@@ -1,8 +1,10 @@
 ## TODO
-  - [ ] Add validations for responses
+  
   - [ ] Add tests
 
 ## DONE
+  - [X] pass logger to registerResponse
+  - [X] Add validations for responses
   - [X] Write the all responses to file formInfo.json
   - [X] extract the function from stdin callback
   - [X] create an entity for field

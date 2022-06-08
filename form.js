@@ -10,13 +10,16 @@ class Form {
     return this.#fields[this.#currentField];
   }
 
-  fillCurrentField(response) {
-    this.getCurrentField().fill(response);
-    this.#currentField++;
-  }
-
   isComplete() {
     return this.#fields.every((field) => field.isFilled());
+  }
+
+  fillCurrentField(response) {
+    this.getCurrentField().fill(response);
+    if (!this.getCurrentField().isFilled()) {
+      return;
+    }
+    this.#currentField++;
   }
 
   getAllResponses() {

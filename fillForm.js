@@ -1,11 +1,12 @@
+const fs = require('fs');
 const { Form } = require('./form.js');
 const { Field } = require('./field.js');
-const fs = require('fs');
+const { MultiLineField } = require('./multiLineField.js');
 
 const saveResponses = (responses) => {
   fs.writeFileSync('formInfo.json', JSON.stringify(responses), 'utf8');
   console.log('Thank you!!');
-  process.exit();
+  process.stdin.destroy();
 };
 
 const validateName = (name) => {
@@ -27,22 +28,20 @@ const isNotEmpty = (response) => {
   return response.length > 0;
 };
 
-function registerResponse(form, response) {
-  let currentField = form.getCurrentField();
-
-  if (!currentField.isValid(response)) {
-    console.log('Invalid response');
-    console.log(currentField.getPrompt());
+function registerResponse(form, response, log) {
+  if (!form.getCurrentField().isValid(response)) {
+    log('Invalid response');
+    log(form.getCurrentField().getPrompt());
     return;
   }
 
   form.fillCurrentField(response);
   if (form.isComplete()) {
     saveResponses(form.getAllResponses());
+    return;
   }
 
-  currentField = form.getCurrentField();
-  console.log(currentField.getPrompt());
+  log(form.getCurrentField().getPrompt());
 }
 
 const main = () => {
@@ -52,12 +51,14 @@ const main = () => {
   const dob = new Field('dob', 'Enter DOB', isYyyyMmDd);
   const hobbies = new Field('hobbies', 'Enter hobbies', isNotEmpty);
   const phoneNo = new Field('phoneNo', 'Enter Phone Number', validatePhoneNo);
-  const form = new Form(name, dob, hobbies, phoneNo);
+  const prompts = ['Enter address line 1', 'Enter address line 2'];
+  const address = new MultiLineField('address', prompts, isNotEmpty);
+
+  const form = new Form(name, dob, hobbies, phoneNo, address);
 
   console.log(form.getCurrentField().getPrompt());
-
   process.stdin.on('data', (response) => {
-    registerResponse(form, response.trim());
+    registerResponse(form, response.trim(), console.log);
   });
 };
 
