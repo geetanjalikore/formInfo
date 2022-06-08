@@ -34,6 +34,14 @@ class Form {
   isComplete() {
     return this.#fields.every((field) => field.isFilled());
   }
+
+  getAllResponses() {
+    const responses = {};
+    this.#fields.forEach(field => {
+      responses[field.getName()] = field.getResponse();
+    });
+    return responses;
+  }
 }
 
 module.exports = { Form };

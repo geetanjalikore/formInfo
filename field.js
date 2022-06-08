@@ -20,6 +20,17 @@ class Field {
   isFilled() {
     return this.#response !== null;
   }
+
+  getName() {
+    return this.#name;
+  }
+
+  getResponse() {
+    if (this.#name === 'hobbies') {
+      return this.#response.split(',');
+    }
+    return this.#response;
+  }
 }
 
 module.exports = { Field };
