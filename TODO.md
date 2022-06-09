@@ -1,8 +1,12 @@
 ## TODO
   
-  - [ ] Add tests
+  - [ ] Add tests for 
+    - [ ] Form entity
+    - [ ] Field entity
+    - [ ] registerResponse function
 
 ## DONE
+  - [X] Change directory structure to src test
   - [X] pass logger to registerResponse
   - [X] Add validations for responses
   - [X] Write the all responses to file formInfo.json

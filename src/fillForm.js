@@ -1,7 +1,4 @@
 const fs = require('fs');
-const { Form } = require('./form.js');
-const { Field } = require('./field.js');
-const { MultiLineField } = require('./multiLineField.js');
 
 const saveResponses = (responses) => {
   fs.writeFileSync('formInfo.json', JSON.stringify(responses), 'utf8');
@@ -44,22 +41,10 @@ function registerResponse(form, response, log) {
   log(form.getCurrentField().getPrompt());
 }
 
-const main = () => {
-  process.stdin.setEncoding('utf8');
-
-  const name = new Field('name', 'Enter name', validateName);
-  const dob = new Field('dob', 'Enter DOB', isYyyyMmDd);
-  const hobbies = new Field('hobbies', 'Enter hobbies', isNotEmpty);
-  const phoneNo = new Field('phoneNo', 'Enter Phone Number', validatePhoneNo);
-  const prompts = ['Enter address line 1', 'Enter address line 2'];
-  const address = new MultiLineField('address', prompts, isNotEmpty);
-
-  const form = new Form(name, dob, hobbies, phoneNo, address);
-
-  console.log(form.getCurrentField().getPrompt());
-  process.stdin.on('data', (response) => {
-    registerResponse(form, response.trim(), console.log);
-  });
+module.exports = {
+  registerResponse,
+  isNotEmpty,
+  validateName,
+  validatePhoneNo,
+  isYyyyMmDd
 };
-
-main();
