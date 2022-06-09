@@ -1,9 +1,5 @@
-const fs = require('fs');
-
-const saveResponses = (responses) => {
-  fs.writeFileSync('formInfo.json', JSON.stringify(responses), 'utf8');
-  console.log('Thank you!!');
-  process.stdin.destroy();
+const saveResponses = (responses, writeFile) => {
+  writeFile('formInfo.json', JSON.stringify(responses), 'utf8');
 };
 
 const validateName = (name) => {
@@ -25,7 +21,7 @@ const isNotEmpty = (response) => {
   return response.length > 0;
 };
 
-function registerResponse(form, response, log) {
+function registerResponse(form, response, log, writeFile) {
   if (!form.getCurrentField().isValid(response)) {
     log('Invalid response');
     log(form.getCurrentField().getPrompt());
@@ -34,7 +30,9 @@ function registerResponse(form, response, log) {
 
   form.fillCurrentField(response);
   if (form.isComplete()) {
-    saveResponses(form.getAllResponses());
+    saveResponses(form.getAllResponses(), writeFile);
+    log('Thank you!!');
+    process.stdin.destroy();
     return;
   }
 

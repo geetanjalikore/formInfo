@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { Form } = require('./src/form.js');
 const { Field } = require('./src/field.js');
 const { MultiLineField } = require('./src/multiLineField.js');
@@ -21,7 +22,7 @@ const main = () => {
 
   console.log(form.getCurrentField().getPrompt());
   process.stdin.on('data', (response) => {
-    registerResponse(form, response.trim(), console.log);
+    registerResponse(form, response.trim(), console.log, fs.writeFileSync);
   });
 };
 
